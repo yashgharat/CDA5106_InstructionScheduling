@@ -1,0 +1,11 @@
+{
+  "name": "C Launch",
+  "request": "launch",
+  "program": "${workspaceFolder}/a.out",
+  "args": ["./sim", "16", "4", "validation_traces/val_trace_gcc1"],
+  "environment": [{ "name": "config", "value": "Debug" }],
+  "cwd": "${workspaceFolder}",
+  "osx": {
+    "MIMode": "lldb"
+  },
+}
