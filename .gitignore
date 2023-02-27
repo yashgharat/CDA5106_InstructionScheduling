@@ -1,2 +1,18 @@
-./debug_runs
-./debug_traces
+# files
+for_gcc_plot
+for_perl_plot
+gen_graph_data.sh
+gnuplot_commands
+graph_points.gcc1
+graph_points.perl1
+report.pdf
+tmptrace
+tmptrace_debug
+
+
+# directories
+/debug_runs
+/debug_traces
+/main.dSYM
+/scope-tool
+/validation_runs
