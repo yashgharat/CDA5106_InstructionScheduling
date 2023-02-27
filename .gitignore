@@ -5,7 +5,9 @@ gen_graph_data.sh
 gnuplot_commands
 graph_points.gcc1
 graph_points.perl1
+Makefile
 report.pdf
+runme.sh
 tmptrace
 tmptrace_debug
 
