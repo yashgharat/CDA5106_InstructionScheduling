@@ -54,6 +54,10 @@ int main(int argc, char *argv[])
 	N = atoi(argv[2]);
 	strcpy(trace_file, argv[3]);
 
+	// FIXING MALLOC ERROR????
+	// printf("S: %d N: %d file: %s\n", S, N, trace_file);
+	printf("");
+
 	//hard coding values here since I cannot read data from launch.json
 	// S = atoi("128");
 	// N = atoi("8");
@@ -114,6 +118,7 @@ int main(int argc, char *argv[])
 		}
 	} while (advance_cycle(&i));
 	show_results();
+
 	return(0);
 }
 

@@ -1,7 +1,7 @@
 {
   "configurations": [
     {
-      "name": "C Launch",
+      "name": "gcc_trace_1",
       "type": "cppdbg",
       "request": "launch",
       "targetArchitecture": "x86_64",
@@ -17,56 +17,56 @@
       "externalConsole": false,
       "MIMode": "lldb"
     },
-    // {
-    //   "name": "C Launch",
-    //   "type": "cppdbg",
-    //   "request": "launch",
-    //   "targetArchitecture": "x86_64",
-    //   "program": "${workspaceFolder}/sim",
-    //   "args": [
-    //     "8",
-    //     "8",
-    //     "traces/val_trace_gcc.txt"
-    //   ],
-    //   "stopAtEntry": false,
-    //   "cwd": "${workspaceFolder}",
-    //   "environment": [],
-    //   "externalConsole": false,
-    //   "MIMode": "lldb"
-    // },
-    // {
-    //   "name": "C Launch",
-    //   "type": "cppdbg",
-    //   "request": "launch",
-    //   "targetArchitecture": "x86_64",
-    //   "program": "${workspaceFolder}/sim",
-    //   "args": [
-    //     "64",
-    //     "1",
-    //     "traces/val_trace_perl.txt"
-    //   ],
-    //   "stopAtEntry": false,
-    //   "cwd": "${workspaceFolder}",
-    //   "environment": [],
-    //   "externalConsole": false,
-    //   "MIMode": "lldb"
-    // },
-    // {
-    //   "name": "C Launch",
-    //   "type": "cppdbg",
-    //   "request": "launch",
-    //   "targetArchitecture": "x86_64",
-    //   "program": "${workspaceFolder}/sim",
-    //   "args": [
-    //     "128",
-    //     "8",
-    //     "traces/val_trace_perl.txt"
-    //   ],
-    //   "stopAtEntry": false,
-    //   "cwd": "${workspaceFolder}",
-    //   "environment": [],
-    //   "externalConsole": false,
-    //   "MIMode": "lldb"
-    // }
+    {
+      "name": "gcc_trace_2",
+      "type": "cppdbg",
+      "request": "launch",
+      "targetArchitecture": "x86_64",
+      "program": "${workspaceFolder}/sim",
+      "args": [
+        "8",
+        "8",
+        "traces/val_trace_gcc.txt"
+      ],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "lldb"
+    },
+    {
+      "name": "perl_trace_1",
+      "type": "cppdbg",
+      "request": "launch",
+      "targetArchitecture": "x86_64",
+      "program": "${workspaceFolder}/sim",
+      "args": [
+        "64",
+        "1",
+        "traces/val_trace_perl.txt"
+      ],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "lldb"
+    },
+    {
+      "name": "perl_trace_2",
+      "type": "cppdbg",
+      "request": "launch",
+      "targetArchitecture": "x86_64",
+      "program": "${workspaceFolder}/sim",
+      "args": [
+        "128",
+        "8",
+        "traces/val_trace_perl.txt"
+      ],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "lldb"
+    }
   ]
 }
