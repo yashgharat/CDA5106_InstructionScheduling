@@ -43,21 +43,21 @@ int main(int argc, char *argv[])
 	//this is not reading on my end, I might need to fix reading args
 	//coming from launch.json
 
-	// if (argc != 4) {
-	// 	printf("Invalid Number of arguments, please restart the program!\n");
-	// 	show_howTo();
-	// 	printf("Exiting...\n");
-	// 	exit(1);
-	// }
+	if (argc != 4) {
+		printf("Invalid Number of arguments, please restart the program!\n");
+		show_howTo();
+		printf("Exiting...\n");
+		exit(1);
+	}
 
-	// S = atoi(argv[1]);
-	// N = atoi(argv[2]);
-	// strcpy(trace_file, argv[3]);
+	S = atoi(argv[1]);
+	N = atoi(argv[2]);
+	strcpy(trace_file, argv[3]);
 
 	//hard coding values here since I cannot read data from launch.json
-	S = atoi("16");
-	N = atoi("4");
-	strcpy(trace_file, "validation_traces/val_trace_test_1");
+	// S = atoi("128");
+	// N = atoi("8");
+	// strcpy(trace_file, "traces/val_trace_perl.txt");
 
 	fp_trace = fopen(trace_file, "r");
 	// if (trace_file == NULL) {
@@ -140,6 +140,6 @@ void show_results()
 	printf("--- Results ---\n");
 	printf("number of instructions = %d\n", inst_count);
 	printf("number of cycles       = %d\n", proc_cycle);
-	printf("IPC                    = %.2f\n", ipc);
+	printf("IPC                    = %.5f\n", ipc);
 }
 

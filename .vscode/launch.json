@@ -1,11 +1,72 @@
 {
-  "name": "C Launch",
-  "request": "launch",
-  "program": "${workspaceFolder}/a.out",
-  "args": ["./sim", "16", "4", "validation_traces/val_trace_gcc1"],
-  "environment": [{ "name": "config", "value": "Debug" }],
-  "cwd": "${workspaceFolder}",
-  "osx": {
-    "MIMode": "lldb"
-  },
+  "configurations": [
+    {
+      "name": "C Launch",
+      "type": "cppdbg",
+      "request": "launch",
+      "targetArchitecture": "x86_64",
+      "program": "${workspaceFolder}/sim",
+      "args": [
+        "2",
+        "8",
+        "traces/val_trace_gcc.txt"
+      ],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "lldb"
+    },
+    // {
+    //   "name": "C Launch",
+    //   "type": "cppdbg",
+    //   "request": "launch",
+    //   "targetArchitecture": "x86_64",
+    //   "program": "${workspaceFolder}/sim",
+    //   "args": [
+    //     "8",
+    //     "8",
+    //     "traces/val_trace_gcc.txt"
+    //   ],
+    //   "stopAtEntry": false,
+    //   "cwd": "${workspaceFolder}",
+    //   "environment": [],
+    //   "externalConsole": false,
+    //   "MIMode": "lldb"
+    // },
+    // {
+    //   "name": "C Launch",
+    //   "type": "cppdbg",
+    //   "request": "launch",
+    //   "targetArchitecture": "x86_64",
+    //   "program": "${workspaceFolder}/sim",
+    //   "args": [
+    //     "64",
+    //     "1",
+    //     "traces/val_trace_perl.txt"
+    //   ],
+    //   "stopAtEntry": false,
+    //   "cwd": "${workspaceFolder}",
+    //   "environment": [],
+    //   "externalConsole": false,
+    //   "MIMode": "lldb"
+    // },
+    // {
+    //   "name": "C Launch",
+    //   "type": "cppdbg",
+    //   "request": "launch",
+    //   "targetArchitecture": "x86_64",
+    //   "program": "${workspaceFolder}/sim",
+    //   "args": [
+    //     "128",
+    //     "8",
+    //     "traces/val_trace_perl.txt"
+    //   ],
+    //   "stopAtEntry": false,
+    //   "cwd": "${workspaceFolder}",
+    //   "environment": [],
+    //   "externalConsole": false,
+    //   "MIMode": "lldb"
+    // }
+  ]
 }

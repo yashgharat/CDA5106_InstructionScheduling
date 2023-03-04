@@ -5,11 +5,16 @@ gen_graph_data.sh
 gnuplot_commands
 graph_points.gcc1
 graph_points.perl1
-Makefile
 report.pdf
 runme.sh
 tmptrace
 tmptrace_debug
+.DS_Store
+.o
+sim
+run*
+check*
+main.dSYM
 
 
 # directories
@@ -17,4 +22,3 @@ tmptrace_debug
 /debug_traces
 /main.dSYM
 /scope-tool
-/validation_runs
