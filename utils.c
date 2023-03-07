@@ -1,3 +1,5 @@
+//this is old file we do not need it anymore - content was moved to main.h
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>

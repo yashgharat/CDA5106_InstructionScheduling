@@ -104,12 +104,6 @@ int main(int argc, char *argv[])
 		issue();
 		dispatch();
 
-		/* FETCH */
-		/* Keep on fetching new instructions until ALL of the following is TRUE - 
-		   1) Instruction Stream is no exhausted.
-		   2) The fetch bandwidth (N) is not exhausted.
-		   3) The dispatch_list is not full.
-		*/
 		j = 0;
 		while (i < inst_count && j < N && dispatch_count < (2*N)) {
 			do_fetch(&inst_stream[i]);
@@ -125,12 +119,12 @@ int main(int argc, char *argv[])
 
 void show_howTo()
 {
-	printf("\nOut-of-order Superscalar Processor Simulator should be run as follows - \n");
-	printf("$ ./sim S N tracefile\n");
-	printf("Where:\n");
-	printf("S: The Scheduling Queue Size\n");
-	printf("N: The peak fetch, issue and disptach rate.\n");
-	printf("tracefile: Filename of the input trace\n\n");
+	printf("\nOut of order Superscalar Simulator runs as: \n");
+	printf("$ ./sim <S> <N> <TraceFile>\n");
+	printf("Vars:\n");
+	printf("S: The Scheduling Queue is S instructions in size\n");
+	printf("N: instructions per cycle\n");
+	printf("TraceFile: Input trace file\n\n");
 }
 
 void show_results()
@@ -138,11 +132,11 @@ void show_results()
 	proc_cycle -= 1;
 	float ipc = ((float)inst_count) / ((float)proc_cycle);
 
-	printf("--- Initial configuration ---\n");
+	printf("----- Initial configuration -----\n");
 	printf("superscalar bandwidth (N) = %d\n", N);
 	printf("dispatch queue size (2*N) = %d\n", 2*N);
 	printf("schedule queue size (S)   = %d\n", S);
-	printf("--- Results ---\n");
+	printf("----- Results -----\n");
 	printf("number of instructions = %d\n", inst_count);
 	printf("number of cycles       = %d\n", proc_cycle);
 	printf("IPC                    = %.5f\n", ipc);

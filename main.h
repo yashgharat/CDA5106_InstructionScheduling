@@ -17,6 +17,9 @@
 
 #define MAX_TRACEFILE_SIZE 1<<20
 
+/*
+	Init our sim variables to that can be config from cmmd line
+*/
 extern int S;
 extern int N;
 extern FILE *fp_trace;
@@ -39,6 +42,13 @@ extern inst_t inst;
 extern inst_t inst_stream[MAX_TRACEFILE_SIZE];
 extern unsigned int inst_count;
 
+/*
+	Our five stage pipeline
+	IF | ID | IS | EX | WB
+
+	Define 5 states that an instruction can be in (e.g., use an enumerated type): IF (fetch), 
+	ID (dispatch), IS (issue), EX (execute), WB (writeback). – this can be found on instructions.pdf
+*/
 #define IF 0
 #define ID 1
 #define IS 2
@@ -69,6 +79,10 @@ typedef struct _node_t {
 	struct _node_t *next;
 }node_t;
 
+
+/*
+	Define a circular FIFO that holds all active instructions in their program order. 
+*/
 extern node_t *fake_rob;
 extern node_t *dispatch_list;
 extern node_t *issue_list;
@@ -78,7 +92,8 @@ extern int dispatch_count;
 extern int issue_count;
 extern int execute_count;
 
-#define REGISTER_FILE_SIZE 128
+// #define REGISTER_FILE_SIZE 128
+#define REGISTER_FILE_SIZE 1024
 
 typedef struct _register_file_t {
 	int ready;
@@ -102,23 +117,7 @@ typedef struct _timing_info_t {
 }timing_info_t;
 
 extern timing_info_t *timing_info;
-
-// extern void initialize_data_structs(int, int);
-// extern void initialize_timing_info(int);
-
 extern unsigned int proc_cycle;
-
-// extern int advance_cycle(int *);
-// extern void do_fetch(inst_t *);
-// extern void dispatch();
-// extern void issue();
-// extern void execute();
-// extern void fake_retire();
-
-// extern void print_fake_rob();
-// extern void print_dispatch_list();
-// extern void print_issue_list();
-// extern void print_execute_list();
 
 
 //new stuff
@@ -187,10 +186,9 @@ void initialize_data_structs(int S, int N)
 	init_node(fake_rob);
 	fake_rob->next = fake_rob;
 
-	/* Initilize and allocate Dispatch_List.
+	/* Init and allocate Dispatch_List.
 	   The dispatch_list models the Dispatch Queue. So it will contain instructions in either IF or ID stage.
-	   The dispatch_list will be of size "2N".
-	   The dispatch_list will be a circular linked list with a head node. 
+	   Size of "2N".
 	   The "dispatch_count" keeps track of number instructions in the dispatch_list.
 	*/
 	dispatch_list = (node_t *)malloc(sizeof(node_t) * 1);
@@ -202,15 +200,12 @@ void initialize_data_structs(int S, int N)
 
 	init_node(dispatch_list);
 	dispatch_list->next = dispatch_list;
-
 	dispatch_count = 0;
 
-	/* Initilize and allocate Issue_List.
-	   The issue_list models the Scheduling Queue.
+	/* Init and allocate Issue List.
 	   It contains the list of instructions in IS stage. These will be those waiting for operands or available issue bandwidth.
 	   The issue_list will be of size "S".
-	   The issue_list will be a circular linked list with a head node. 
-	   The "issue_count" keeps track of number instructions in the issue_list.
+	   The "issue_count" keeps track of number instructions in the iss_list.
 	*/
 	issue_list = (node_t *)malloc(sizeof(node_t) * 1);
 	if (!issue_list) {
@@ -221,15 +216,12 @@ void initialize_data_structs(int S, int N)
 
 	init_node(issue_list);
 	issue_list->next = issue_list;
-
 	issue_count = 0;
 
-	/* Initilize and allocate Execute_List. 
-	   The execute_list models the Scheduling Queue. The execute_list models the N FUs (Fully pipelined Functional Units).
+	/* Init and allocate Exect List. 
 	   It contains the list of instructions in EX stage. These will be those waiting for execution latency of the operation.
 	   The execute_list will be of size "N".
-	   The execute_list will be a circular linked list with a head node. 
-	   The "execute_count" keeps track of number instructions in the execute_list.
+	   The "execute_count" keeps track of number instructions in the exec_list.
  	*/
 	execute_list = (node_t *)malloc(sizeof(node_t) * 1);
 	if (!execute_list) {
@@ -281,8 +273,8 @@ void initialize_timing_info(int inst_count)
 	
 	timing_info = (timing_info_t *)malloc(sizeof(timing_info_t) * inst_count);
 	if (!timing_info) {
-		printf("Memory Allocation Failed!\n");
-		printf("Exiting...\n");
+		printf("Memory allocation failed!\n");
+		printf("Quitting simulation...\n");
 		exit(1);
 	}
 
@@ -296,12 +288,12 @@ void initialize_timing_info(int inst_count)
 		timing_info[i].dispatch.duration = -1;
 
 		timing_info[i].issue.start_cycle = -1;
-		timing_info[i].issue.duration = -1;
+		timing_info[i].issue.duration = -1; // having issues when testing S >= 64, where duration is off by (issue.duration-1).
 
-		timing_info[i].execute.start_cycle = -1;
+		timing_info[i].execute.start_cycle = -1; // having issues when testing S >= 64, where cycle is off by (execute.start_cycle-1).
 		timing_info[i].execute.duration = -1;
 
-		timing_info[i].writeback.start_cycle = -1;
+		timing_info[i].writeback.start_cycle = -1; // having issues when testing S >= 64, where cycle is off by (writeback.start_cycle-1).
 		timing_info[i].writeback.duration = -1;
 	
 	}
@@ -309,7 +301,6 @@ void initialize_timing_info(int inst_count)
 
 void sort_list(node_t *node_list, int count)
 {
-	/* Insertion Sort - Ascending Order based on tag. */
 	int i=0, j=0;
 	node_t x;
 
@@ -446,12 +437,17 @@ void dispatch()
 		tmp = tmp->next;
 	}
 
-	/* Sort the temp_list in ascending order of tags. */
+	/* 
+		Sorting the temp_list in ascending order of tags. 
+	*/
 	sort_list(temp_list, temp_count);
 
 	i = 0;
+	
 	while (i < temp_count && issue_count < S) {
-		/* Remove the instruction from dispatch_list. */
+		/* 
+			Removing the instruction from dispatch_list. 
+		*/
 		p = dispatch_list->next;
 		q = NULL;
 		while (p != dispatch_list) {
@@ -533,8 +529,8 @@ void dispatch()
 		i += 1;
 	}
 
-	/* For instructions in the dispatch_list that are in the IF stage, unconditionally transition to ID stage.
-	   This models the one-cycle latency of the IF stage.
+	/* 
+		For instructions in the dispatch_list that are in the IF stage, unconditionally transition to ID stage.
 	*/
 	p = dispatch_list->next;
 	while (p != dispatch_list) {
@@ -565,7 +561,8 @@ void issue()
 	node_t *temp_list=0;
 	node_t *p=0, *q=0, *tmp=0;
 
-	/* From the issue_list, construct a temporary list of instructions whose operands are ready.
+	/* 
+		From the issue_list, construct a temp list of instructions
 	*/
 	temp_list = (node_t *)malloc(sizeof(node_t) * issue_count);
 	if (!temp_list) {
@@ -589,13 +586,17 @@ void issue()
 		tmp = tmp->next;
 	}
 
-	/* Sort the temp_list in ascending order of tags. */
+	/* 
+		Sorting the temp_list in ascending order of tags. 
+	*/
 	sort_list(temp_list, temp_count);
 
 	i = 0;
 	execute_count = 0;
 	while (i < temp_count && execute_count < N) {
-		/* Remove the instruction from issue_list. */
+		/* 
+			Removing the instruction from issue_list. 
+		*/
 		p = issue_list->next;
 		q = NULL;
 		while (p != issue_list) {
